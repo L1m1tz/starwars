@@ -4,7 +4,7 @@ export default {
   getAll() {
     return API().get("https://swapi.dev/api/");
   },
-  getName() {
+  getPeople() {
     return API().get("https://swapi.dev/api/people");
   },
   getGender() {
