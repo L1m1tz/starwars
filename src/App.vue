@@ -1,79 +1,59 @@
 <template>
-  <div class="container">
-    <div v-if="people.length === 0">
+  <main class="main">
+    <section class="container" v-if="people.length === 0">
       <p>Loading...</p>
-    </div>
-    <div v-else>
-
-        <div style="margin: 5px;" v-for="person in people">
-          {{ person.name }}
-          {{ person.homeworld }}
-        </div>
-
-    </div>
-  </div>
+    </section>
+    <section class="container" v-else>
+      <div class="person" v-for="person in people" v-bind:key="person.name">
+        <article>
+          <p>Name: {{ person.name }}</p>
+          <p>Gender: {{ person.gender }}</p>
+          <p>Species: {{ person.species }}</p>
+          <p>Home World: {{ person.homeworld }}</p>
+          <p>Starships: {{ person.starships }}</p>
+        </article>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script>
 //import { ref } from "vue";
 import axios from "axios";
-// import StarWarsAPI from "./services/StarWarsAPI";
+import StarWarsAPI from "./services/StarWarsAPI";
 //import Characters from "./components/Characters";
 
 export default {
   data() {
     return {
       people: [],
+      species: [],
+      homeworld: [],
+      starships: [],
     };
   },
   methods: {
     getPeople() {
-      console.log('about to request');
-      axios.get("https://swapi.dev/api/people").then((res) => {
-        console.log('response received');
-        console.log(res);
-        this.people = res.data.results
-        });
-        console.log('finished making request');
+      StarWarsAPI.getPeople().then((res) => {
+        this.people = res.data.results;
+      });
+      StarWarsAPI.getSpecies().then((res) => {
+        this.species = res.data.results;
+      });
+      StarWarsAPI.getHomeWorld().then((res) => {
+        this.homeworld = res.data.results;
+      });
+      StarWarsAPI.getStarships().then((res) => {
+        this.starships = res.data.results;
+      });
     },
   },
   mounted() {
-    console.log("setup starting");
     this.getPeople();
-    console.log("setup done");
   },
-  //setup() {
-  //   const quote = ref("");
-
-  //   StarWarsAPI.getName()
-  //     .then((response) => {
-  //       // handle response
-  //       quote.value = response.data.results;
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-
-  //   return {
-  //     quote,
-  //   };
-  // },
-
-  // components: {
-  //   Header,
-  //   Profiles,
-  //   Characters,
-  // },
 };
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import url("assets/style.css");
 </style>
