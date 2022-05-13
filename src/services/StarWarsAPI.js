@@ -7,9 +7,6 @@ export default {
   getPeople() {
     return API().get("https://swapi.dev/api/people");
   },
-  getGender() {
-    return API().get("https://swapi.dev/api/people");
-  },
   getSpecies() {
     return API().get("https://swapi.dev/api/species");
   },
