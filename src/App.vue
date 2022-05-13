@@ -1,40 +1,64 @@
 <template>
   <div class="container">
-    <i>{{ quote }}</i>
+    <div v-if="people.length === 0">
+      <p>Loading...</p>
+    </div>
+    <div v-else>
+
+        <div style="margin: 5px;" v-for="person in people">
+          {{ person.name }}
+          {{ person.homeworld }}
+        </div>
+
+    </div>
   </div>
-  <!-- <h1>People</h1> -->
-  <!-- <div v-for="quot in quote" :key="quote.id" class="quote">hello</div>
-    <router-link :to="{ name: 'Jobdetails', params: { id: quote.id } }">
-      <h2>{{ Job.title }}</h2>
-    </router-link>
-  </div> -->
 </template>
 
 <script>
-//import axios from "axios";
-import { ref } from "vue";
-import Header from "./components/Header";
-import StarWarsAPI from "./services/StarWarsAPI";
-import Characters from "./components/Characters";
+//import { ref } from "vue";
+import axios from "axios";
+// import StarWarsAPI from "./services/StarWarsAPI";
+//import Characters from "./components/Characters";
 
 export default {
-  setup() {
-    const quote = ref("");
-
-    const loadQuote = async () => {
-      try {
-        const response = await StarWarsAPI.getName();
-        quote.value = response.data.results;
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    loadQuote();
+  data() {
     return {
-      quote,
+      people: [],
     };
   },
+  methods: {
+    getPeople() {
+      console.log('about to request');
+      axios.get("https://swapi.dev/api/people").then((res) => {
+        console.log('response received');
+        console.log(res);
+        this.people = res.data.results
+        });
+        console.log('finished making request');
+    },
+  },
+  mounted() {
+    console.log("setup starting");
+    this.getPeople();
+    console.log("setup done");
+  },
+  //setup() {
+  //   const quote = ref("");
+
+  //   StarWarsAPI.getName()
+  //     .then((response) => {
+  //       // handle response
+  //       quote.value = response.data.results;
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+
+  //   return {
+  //     quote,
+  //   };
+  // },
+
   // components: {
   //   Header,
   //   Profiles,
